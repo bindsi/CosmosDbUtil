@@ -1,0 +1,127 @@
+{
+  "timestamp": 1579870371,
+  "vin": "",
+  "vehicleId": "2345",
+  "customerId": 4711,
+  "licensePlate": "S-RD 3009",
+  "brand": "Mercedes",
+  "model": "S 300",
+  "fuelType": "diesel",
+  "color": "black",
+  "milage": "12345",
+  "stateOfCharge": 45,
+  "fleets": [
+    {
+      "fleetId": 1,
+      "fleetName": "MyFleet"
+    }
+  ],
+  "assignedDriver": {
+    "userId": 1,
+    "driverName": "Driver1",
+    "driverGivenName": "Max",
+    "driverPhone": "0190123456",
+    "driverPictureUrl": "http://my.url"
+  },
+  "driverPool": [
+    {
+      "userId": 2,
+      "userKey": "77a37519-614e-44fa-ada1-9bc1eec03813",
+      "firstName": "Max",
+      "lastName": "Musterdriver2"
+    },
+    {
+      "userId": 3,
+      "userKey": "77a37519-614e-44fa-ada1-9bc1eec03813",
+      "firstName": "Max",
+      "lastName": "Musterdriver3"
+    },
+    {
+      "userId": 4,
+      "userKey": "77a37519-614e-44fa-ada1-9bc1eec03813",
+      "firstName": "Max",
+      "lastName": "Musterdriver4"
+    },
+    {
+      "userId": 5,
+      "userKey": "77a37519-614e-44fa-ada1-9bc1eec03813",
+      "firstName": "Max",
+      "lastName": "Musterdriver5"
+    },
+    {
+      "userId": 6,
+      "userKey": "77a37519-614e-44fa-ada1-9bc1eec03813",
+      "firstName": "Max",
+      "lastName": "Musterdriver6"
+    },
+    {
+      "userId": 7,
+      "userKey": "77a37519-614e-44fa-ada1-9bc1eec03813",
+      "firstName": "Max",
+      "lastName": "Musterdriver7"
+    },
+    {
+      "userId": 8,
+      "userKey": "77a37519-614e-44fa-ada1-9bc1eec03813",
+      "firstName": "Max",
+      "lastName": "Musterdriver8"
+    },
+    {
+      "userId": 9,
+      "userKey": "77a37519-614e-44fa-ada1-9bc1eec03813",
+      "firstName": "Max",
+      "lastName": "Musterdriver9"
+    }
+  ],
+  "serviceTime": 12345,
+  "serviceDistance": 4000,
+  "precondError": "NoError",
+  "precondActive": "ACTIVE",
+  "precondAtDeparture": "2020-01-02",
+  "departureTime": "string",
+  "departureTimeMode": "string",
+  "endOfChargeTime": "string",
+  "departureTimeSoc": "string",
+  "chargingStatus": "CHARGING",
+  "maxRange": "400",
+  "vizEngineType": "ELECTRIC",
+  "vizModel": "n/a",
+  "vizVehicleType": "n/a",
+  "dataSource": "SOURCE",
+  "bodyType": "Long",
+  "ignitionState": "OFF",
+  "occupationState": "occupied",
+  "location": {
+    "latitude": "string",
+    "longitude": "string"
+  },
+  "tankLevelPercent": "78",
+  "rangeElectric": "89",
+  "rangeLiquid": "300",
+  "vehicleState": [
+    {
+      "name": "TIREPRESSURE",
+      "value": {},
+      "propertyState": "WARNING",
+      "timestamp": 1579870371
+    }
+  ],
+  "motionInfo": {
+    "timestamp": 1579870371,
+    "eventType": "Started",
+    "latitude": 52.4733441,
+    "longitude": 13.5338874,
+    "heading": 0.0
+  },
+  "activeProducts": [
+    1,
+    3,
+    8,
+    13,
+    28,
+    35
+  ],
+  "theft": {
+    "status": "STOLEN"
+  }
+}
