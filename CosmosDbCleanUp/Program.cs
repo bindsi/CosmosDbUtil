@@ -92,7 +92,7 @@ namespace CosmosDbCleanUp
                 FeedResponse<ResponseDto> response = await feedIterator.ReadNextAsync();
 
                 retVal.AddRange(response);
-                if (retVal.Count >= 1000)
+                if (retVal.Count <= 1000)
                 {
                     break;
                 }
