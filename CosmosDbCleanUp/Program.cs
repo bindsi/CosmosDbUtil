@@ -18,30 +18,19 @@ namespace CosmosDbCleanUp
             try
             {
                 var dbClient = CreateCosmosClient();
-                while (true)
-                {
-                    Console.WriteLine("##################################");
-                    Console.WriteLine("####### Cosmos DB Clean-Up #######");
-                    Console.WriteLine("##################################");
-                    Console.WriteLine("Please enter customerId:");
-                    var customerId = Console.ReadLine();
-                    List<ResponseDto> notificationsAtCustomer;
-                    Console.WriteLine($"Starting to retrieve documents for {customerId}");
-                    notificationsAtCustomer = await GetNotificationsForCustomer(customerId, dbClient);
 
-                    /*foreach(ResponseDto ntf in notificationsAtCustomer) {
-                        Console.WriteLine($"Id {ntf.Id} / upn {ntf.Upn}");
-                    }*/
+                Console.WriteLine("##################################");
+                Console.WriteLine("####### Cosmos DB Clean-Up #######");
+                Console.WriteLine("##################################");
+                Console.WriteLine("Please enter customerId:");
+                var customerId = Console.ReadLine();
 
-                    Console.WriteLine($"Finished to retrieve documents for {customerId}");
+                Console.WriteLine($"Starting to delete documents for {customerId}");
+                var chunkSize = Int32.Parse(ConfigurationManager.AppSettings["DeletionChunkSize"]);
+                await DeletionInChunks(customerId, dbClient, chunkSize);
 
-                    if (!notificationsAtCustomer.Any())
-                        break;
+                Console.WriteLine($"Finished to delete documents for {customerId}");
 
-                    Console.WriteLine($"Starting to delete documents for {customerId}");
-                    DeleteAllNotifications(notificationsAtCustomer, dbClient);
-                    Console.WriteLine($"Finished to delete documents for {customerId}");
-                }
                 Console.WriteLine("##################################");
                 Console.WriteLine("############## DONE ##############");
                 Console.WriteLine("##################################");
@@ -51,6 +40,32 @@ namespace CosmosDbCleanUp
                 Console.WriteLine(e.Message);
             }
         }
+
+        /**
+         * Perform deletion of notifications of a customerId in chunks
+         */
+        private static async Task DeletionInChunks(string customerId, CosmosClient dbClient, int chunkSize) {
+            while (true) {
+                List<ResponseDto> notificationsAtCustomer;
+                Console.WriteLine($"Retrieving chunk of {chunkSize} documents for customer {customerId}");
+                notificationsAtCustomer = await GetNotificationsForCustomer(customerId, dbClient, chunkSize);
+                Console.WriteLine($"Retrieve {notificationsAtCustomer.Count} notifications");
+
+                foreach(ResponseDto ntf in notificationsAtCustomer) {
+                    Console.WriteLine($"Id {ntf.Id} / upn {ntf.Upn}");
+                }
+
+                if (!notificationsAtCustomer.Any())
+                    break;
+
+                Console.WriteLine($"Executing deletion of {notificationsAtCustomer} for customer {customerId}");
+                DeleteAllNotifications(notificationsAtCustomer, dbClient);
+            }
+        }
+
+        /**
+         * Delete all notifications in the provided notification list from notifications Db
+         */
         private static void DeleteAllNotifications(List<ResponseDto> notifications, CosmosClient dbClient)
         {
             var tasks = new List<Task>();
@@ -78,9 +93,12 @@ namespace CosmosDbCleanUp
             Task.WaitAll(tasks.ToArray());
         }
 
-        private static async Task<List<ResponseDto>> GetNotificationsForCustomer(string customerId, CosmosClient dbClient)
+        /**
+         * Retrieve all notifications belonging to a customer as a list from notifications db
+         */
+        private static async Task<List<ResponseDto>> GetNotificationsForCustomer(string customerId, CosmosClient dbClient, int chunkSize)
         {
-
+            Console.WriteLine($"Starting CosmosDb Query to retrieve all notifications for customer {customerId}");
             var query = $"Select * from events where events.customerId='{customerId}'";
             var feedIterator =
                 dbClient.GetContainer(DatabaseName, EventsCollectionName).GetItemQueryIterator<ResponseDto>(
@@ -88,7 +106,7 @@ namespace CosmosDbCleanUp
                     null,
                     new QueryRequestOptions()
                     {
-                        MaxItemCount = 1000
+                        MaxItemCount = chunkSize
                     });
 
             var retVal = new List<ResponseDto>();
@@ -97,7 +115,7 @@ namespace CosmosDbCleanUp
                 FeedResponse<ResponseDto> response = await feedIterator.ReadNextAsync();
 
                 retVal.AddRange(response);
-                if (retVal.Count <= 1000)
+                if (retVal.Count >= chunkSize)
                 {
                     break;
                 }
@@ -106,6 +124,9 @@ namespace CosmosDbCleanUp
             return retVal;
         }
 
+        /**
+         * Setup Cosmos Db connection
+         */
         private static CosmosClient CreateCosmosClient()
         {
             var databaseUrl = ConfigurationManager.AppSettings["DatabaseUrl"];
@@ -114,8 +135,8 @@ namespace CosmosDbCleanUp
                 new CosmosClientOptions()
                 {
                     AllowBulkExecution = true,
-                    MaxRetryAttemptsOnRateLimitedRequests = 9,
-                    MaxRetryWaitTimeOnRateLimitedRequests = TimeSpan.FromSeconds(30)
+                    MaxRetryAttemptsOnRateLimitedRequests = Int32.Parse(ConfigurationManager.AppSettings["MaxRetriesOnRateLimit"]),
+                    MaxRetryWaitTimeOnRateLimitedRequests = TimeSpan.FromSeconds(Int32.Parse(ConfigurationManager.AppSettings["MaxRetryWaitTime"]))
                 });
         }
 
