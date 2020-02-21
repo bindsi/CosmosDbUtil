@@ -25,17 +25,22 @@ namespace CosmosDbCleanUp
                     Console.WriteLine("##################################");
                     Console.WriteLine("Please enter customerId:");
                     var customerId = Console.ReadLine();
-                    List<ResponseDto> customer63;
-                    Console.WriteLine($"Starting to retrieve documents for {nameof(customer63)}");
-                    customer63 = await GetNotificationsForCustomer(customerId, dbClient);
-                    Console.WriteLine($"Finished to retrieve documents for {nameof(customer63)}");
+                    List<ResponseDto> notificationsAtCustomer;
+                    Console.WriteLine($"Starting to retrieve documents for {customerId}");
+                    notificationsAtCustomer = await GetNotificationsForCustomer(customerId, dbClient);
 
-                    if (!customer63.Any())
+                    /*foreach(ResponseDto ntf in notificationsAtCustomer) {
+                        Console.WriteLine($"Id {ntf.Id} / upn {ntf.Upn}");
+                    }*/
+
+                    Console.WriteLine($"Finished to retrieve documents for {customerId}");
+
+                    if (!notificationsAtCustomer.Any())
                         break;
 
-                    Console.WriteLine($"Starting to delete documents for {nameof(customer63)}");
-                    DeleteAllNotifications(customer63, dbClient);
-                    Console.WriteLine($"Finished to delete documents for {nameof(customer63)}");
+                    Console.WriteLine($"Starting to delete documents for {customerId}");
+                    DeleteAllNotifications(notificationsAtCustomer, dbClient);
+                    Console.WriteLine($"Finished to delete documents for {customerId}");
                 }
                 Console.WriteLine("##################################");
                 Console.WriteLine("############## DONE ##############");
