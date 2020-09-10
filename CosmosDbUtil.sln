@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.28714.193
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CosmosDbSimulator", "CosmosDbSimulator\CosmosDbSimulator.csproj", "{3D4D17B1-ADCE-41FB-851B-76BF7A7C41CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosDbCleanUp", "CosmosDbCleanUp\CosmosDbCleanUp.csproj", "{C0A7D2B6-CB39-425B-ACB9-D37ECC5418B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CosmosDbCleanUp", "CosmosDbCleanUp\CosmosDbCleanUp.csproj", "{C0A7D2B6-CB39-425B-ACB9-D37ECC5418B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
